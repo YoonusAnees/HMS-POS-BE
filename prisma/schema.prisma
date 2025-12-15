@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  passwordHash String
+  fullName     String
+  email        String?   @unique
+  role         String    // admin | manager | cashier | reception
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  ordersOpened  Order[]  @relation("orders_opened_by")
+  ordersClosed  Order[]  @relation("orders_closed_by")
+  payments      Payment[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  items       Item[]
+}
+
+model Item {
+  id        Int      @id @default(autoincrement())
+  name      String
+  sku       String?  @unique
+  price     Decimal
+  taxRate   Decimal
+  isActive  Boolean  @default(true)
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  orderItems OrderItem[]
+}
+
+model RestaurantTable {
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  capacity  Int
+  status    String  // free | occupied | reserved
+  isActive  Boolean @default(true)
+
+  orders    Order[]
+}
+
+model Room {
+  id               Int     @id @default(autoincrement())
+  roomNumber       String  @unique
+  floor            String?
+  status           String  // vacant | occupied | out_of_order
+  currentGuestName String?
+
+  orders           Order[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  orderNumber     String   @unique
+  type            String   // dine_in | room | takeaway
+  status          String   // open | closed | cancelled
+
+  tableId         Int?
+  table           RestaurantTable? @relation(fields: [tableId], references: [id])
+
+  roomId          Int?
+  room            Room? @relation(fields: [roomId], references: [id])
+
+  openedById      Int
+  openedBy        User  @relation("orders_opened_by", fields: [openedById], references: [id])
+
+  closedById      Int?
+  closedBy        User? @relation("orders_closed_by", fields: [closedById], references: [id])
+
+  subtotal        Decimal
+  taxTotal        Decimal
+  discountTotal   Decimal
+  serviceCharge   Decimal
+  grandTotal      Decimal
+
+  openedAt        DateTime @default(now())
+  closedAt        DateTime?
+
+  items           OrderItem[]
+  payments        Payment[]
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  order       Order    @relation(fields: [orderId], references: [id])
+  orderId     Int
+  item        Item     @relation(fields: [itemId], references: [id])
+  itemId      Int
+
+  itemName    String
+  qty         Int
+  unitPrice   Decimal
+  taxRate     Decimal
+  discount    Decimal
+  lineTotal   Decimal
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  order          Order    @relation(fields: [orderId], references: [id])
+  orderId        Int
+
+  method         String   // cash | card | room | online
+  amount         Decimal
+  currency       String   @default("LKR")
+  tipAmount      Decimal?
+  paidAt         DateTime @default(now())
+
+  createdBy      User     @relation(fields: [createdById], references: [id])
+  createdById    Int
+}

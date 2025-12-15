@@ -1,0 +1,38 @@
+{
+  "name": "anexxa-pos-be",
+  "version": "1.0.0",
+  "description": "Node.js + Express + Prisma + PostgreSQL backend for the **Hotel POS System**.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YoonusAnees/HMS-POS-BE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YoonusAnees/HMS-POS-BE/issues"
+  },
+  "homepage": "https://github.com/YoonusAnees/HMS-POS-BE#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.1",
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "pg": "^8.16.3"
+  }
+}
