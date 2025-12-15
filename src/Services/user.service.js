@@ -1,7 +1,7 @@
 // src/services/user.service.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import UserModel from '../models/user.model.js';
+import UserModel from '../Models/user.model.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 

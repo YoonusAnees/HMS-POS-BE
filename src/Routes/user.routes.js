@@ -5,8 +5,13 @@ import auth from '../Middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.post('/register', auth(['admin']), UserController.register);
+// Auth routes
 router.post('/login', UserController.login);
+
+// TEMP: open to create first admin; later change to auth(['admin'])
+router.post('/register', UserController.register);
+
+// User management
 router.get('/', auth(['admin', 'manager']), UserController.list);
 
 export default router;
