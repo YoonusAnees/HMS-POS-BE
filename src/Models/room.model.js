@@ -7,4 +7,4 @@ const RoomModel = {
   update: (id, data) => prisma.room.update({ where: { id }, data }),
 };
 
-module.exports = RoomModel;
+export default RoomModel;

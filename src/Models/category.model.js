@@ -1,5 +1,5 @@
 // src/models/category.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const CategoryModel = {
   list: () => prisma.category.findMany(),
@@ -8,4 +8,4 @@ const CategoryModel = {
   remove: (id) => prisma.category.delete({ where: { id } }),
 };
 
-module.exports = CategoryModel;
+export default CategoryModel;

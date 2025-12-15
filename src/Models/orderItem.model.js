@@ -10,4 +10,4 @@ const OrderItemModel = {
     prisma.orderItem.findMany({ where: { orderId } }),
 };
 
-module.exports = OrderItemModel;
+export default OrderItemModel;

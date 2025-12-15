@@ -33,4 +33,4 @@ const OrderModel = {
     }),
 };
 
-module.exports = OrderModel;
+export default OrderModel;

@@ -7,4 +7,4 @@ const PaymentModel = {
     prisma.payment.findMany({ where: { orderId } }),
 };
 
-module.exports = PaymentModel;
+export default PaymentModel;

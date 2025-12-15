@@ -14,4 +14,4 @@ const ItemModel = {
   remove: (id) => prisma.item.delete({ where: { id } }),
 };
 
-module.exports = ItemModel;
+export default ItemModel;
