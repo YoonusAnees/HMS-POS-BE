@@ -1,11 +1,14 @@
 // src/middleware/auth.middleware.js
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 
-module.exports = (allowedRoles = []) => {
+export default function authMiddleware(allowedRoles = []) {
   return (req, res, next) => {
     const authHeader = req.headers.authorization || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+    const token = authHeader.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : null;
 
     if (!token) {
       return res.status(401).json({ message: 'Missing token' });
@@ -16,7 +19,9 @@ module.exports = (allowedRoles = []) => {
       req.user = decoded;
 
       if (allowedRoles.length && !allowedRoles.includes(decoded.role)) {
-        return res.status(403).json({ message: 'Forbidden: insufficient role' });
+        return res
+          .status(403)
+          .json({ message: 'Forbidden: insufficient role' });
       }
 
       next();
@@ -24,4 +29,4 @@ module.exports = (allowedRoles = []) => {
       return res.status(401).json({ message: 'Invalid token' });
     }
   };
-};
+}

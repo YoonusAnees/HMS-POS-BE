@@ -1,5 +1,5 @@
 // src/controllers/user.controller.js
-const UserService = require('../Services/user.service');
+import UserService from '../Services/user.service.js';
 
 const UserController = {
   register: async (req, res, next) => {
@@ -30,4 +30,4 @@ const UserController = {
   },
 };
 
-module.exports = UserController;
+export default UserController;

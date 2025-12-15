@@ -1,7 +1,7 @@
 // src/services/user.service.js
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const UserModel = require('../Models/user.model');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import UserModel from '../models/user.model.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 
@@ -11,7 +11,9 @@ const UserService = {
     if (existing) {
       throw new Error('Username already exists');
     }
+
     const hash = await bcrypt.hash(password, 10);
+
     const user = await UserModel.create({
       username,
       passwordHash: hash,
@@ -19,6 +21,7 @@ const UserService = {
       email,
       role: role || 'cashier',
     });
+
     return user;
   },
 
@@ -30,7 +33,11 @@ const UserService = {
     if (!ok) throw new Error('Invalid username or password');
 
     const token = jwt.sign(
-      { sub: user.id, role: user.role, username: user.username },
+      {
+        sub: user.id,
+        role: user.role,
+        username: user.username,
+      },
       JWT_SECRET,
       { expiresIn: '8h' }
     );
@@ -50,4 +57,4 @@ const UserService = {
   },
 };
 
-module.exports = UserService;
+export default UserService;

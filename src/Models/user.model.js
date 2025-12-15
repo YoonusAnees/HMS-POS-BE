@@ -1,13 +1,15 @@
 // src/models/user.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const UserModel = {
-  findById: (id) => prisma.user.findUnique({ where: { id } }),
+  findById: (id) =>
+    prisma.user.findUnique({ where: { id } }),
 
   findByUsername: (username) =>
     prisma.user.findUnique({ where: { username } }),
 
-  create: (data) => prisma.user.create({ data }),
+  create: (data) =>
+    prisma.user.create({ data }),
 
   list: () =>
     prisma.user.findMany({
@@ -22,4 +24,4 @@ const UserModel = {
     }),
 };
 
-module.exports = UserModel;
+export default UserModel;

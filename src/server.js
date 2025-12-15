@@ -1,9 +1,11 @@
 // src/server.js
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const routes = require('./index');
-const errorHandler = require('./middleware/error.middleware');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import routes from './index.js';
+import errorHandler from './Middlewares/error.middleware.js';
+
+dotenv.config();
 
 const app = express();
 

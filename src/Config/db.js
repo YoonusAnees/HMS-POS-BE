@@ -1,6 +1,12 @@
-// src/config/db.js
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-const prisma = new PrismaClient();
+// 1. Create an adapter with your connection string
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
 
-module.exports = prisma;
+// 2. Pass the adapter to PrismaClient
+const prisma = new PrismaClient({ adapter });
+
+export default prisma;

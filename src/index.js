@@ -1,10 +1,9 @@
 // src/routes/index.js
-const express = require('express');
-const userRoutes = require('./Routes/user.routes');
-
+import express from 'express';
+import userRoutes from './Routes/user.routes.js';
 
 const router = express.Router();
 
 router.use('/users', userRoutes);
 
-module.exports = router;
+export default router;
