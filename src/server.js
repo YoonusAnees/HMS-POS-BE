@@ -21,6 +21,8 @@ app.use('/api', routes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
 });

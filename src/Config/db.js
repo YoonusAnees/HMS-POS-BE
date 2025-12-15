@@ -1,12 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import dotenv from 'dotenv';
 
-// 1. Create an adapter with your connection string
+dotenv.config();
+
+// Create Prisma adapter with connection string
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
 
-// 2. Pass the adapter to PrismaClient
-const prisma = new PrismaClient({ adapter });
+// Pass adapter to PrismaClient
+const prisma = new PrismaClient({ adapter, log: ['error'] });
 
 export default prisma;
