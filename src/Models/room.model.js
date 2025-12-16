@@ -1,5 +1,5 @@
 // src/models/room.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const RoomModel = {
   list: () => prisma.room.findMany(),

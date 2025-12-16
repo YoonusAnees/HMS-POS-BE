@@ -1,5 +1,5 @@
 // src/models/item.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const ItemModel = {
   list: () =>
