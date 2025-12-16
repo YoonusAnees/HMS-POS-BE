@@ -1,5 +1,5 @@
 // src/models/payment.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const PaymentModel = {
   create: (data) => prisma.payment.create({ data }),

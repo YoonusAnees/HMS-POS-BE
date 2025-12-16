@@ -28,4 +28,4 @@ function calculateOrderTotals(items, serviceChargeRate = 0) {
   };
 }
 
-module.exports = { calculateOrderTotals };
+export default calculateOrderTotals;

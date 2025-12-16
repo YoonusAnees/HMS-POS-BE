@@ -1,5 +1,5 @@
 // src/models/orderItem.model.js
-const prisma = require('../Config/db');
+import prisma from '../Config/db.js';
 
 const OrderItemModel = {
   createMany: (data) => prisma.orderItem.createMany({ data }),
