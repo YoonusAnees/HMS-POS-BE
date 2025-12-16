@@ -1,13 +1,15 @@
-// src/models/orderItem.model.js
 import prisma from '../Config/db.js';
 
 const OrderItemModel = {
-  createMany: (data) => prisma.orderItem.createMany({ data }),
-
-  addSingle: (data) => prisma.orderItem.create({ data }),
+  addMany: (items) =>
+    prisma.orderItem.createMany({
+      data: items,
+    }),
 
   listByOrder: (orderId) =>
-    prisma.orderItem.findMany({ where: { orderId } }),
+    prisma.orderItem.findMany({
+      where: { orderId },
+    }),
 };
 
 export default OrderItemModel;
