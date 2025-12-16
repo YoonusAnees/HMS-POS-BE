@@ -4,6 +4,8 @@ import userRoutes from './Routes/user.routes.js';
 import categoryRoutes from './Routes/category.routes.js';
 import itemRoutes from './Routes/item.routes.js';
 import roomRoutes from './Routes/room.routes.js';
+import tableRoutes from './Routes/table.routes.js';
+
 
 const router = express.Router();
 
@@ -21,6 +23,9 @@ router.use('/items', itemRoutes);
 
 //Room endpoints
 router.use('/rooms', roomRoutes);
+
+//Table endpoints
+router.use('/tables', tableRoutes);
 
 
 export default router;
