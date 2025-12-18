@@ -3,22 +3,9 @@ import PaymentService from '../Services/payment.service.js';
 const PaymentController = {
   create: async (req, res, next) => {
     try {
-      const payment = await PaymentService.create(
-        req.body,
-        req.user.sub
-      );
-      res.status(201).json(payment);
-    } catch (err) {
-      next(err);
-    }
-  },
-
-  listByOrder: async (req, res, next) => {
-    try {
-      const payments = await PaymentService.listByOrder(
-        Number(req.params.orderId)
-      );
-      res.json(payments);
+      const createdById = req.user.sub;
+      const result = await PaymentService.createPayment(req.body, createdById);
+      res.status(201).json({ message: 'Payment created', ...result });
     } catch (err) {
       next(err);
     }
