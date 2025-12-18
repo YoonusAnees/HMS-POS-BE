@@ -60,7 +60,7 @@ model Room {
   roomNumber       String  @unique
   floor            String?
   status           String  // vacant | occupied | out_of_order
-  currentGuestName String?
+  currentGuestName String? 
 
   orders           Order[]
 }
