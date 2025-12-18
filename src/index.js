@@ -7,6 +7,9 @@ import roomRoutes from './Routes/room.routes.js';
 import tableRoutes from './Routes/table.routes.js';
 import orderRoutes from './Routes/order.routes.js';
 import paymentRoutes from './Routes/payment.routes.js';
+import refundRoutes from './Routes/refund.routes.js';
+import reportRoutes from './Routes/report.routes.js';
+import dashboardRoutes from './Routes/dashboard.routes.js';
 
 
 
@@ -35,6 +38,15 @@ router.use('/orders', orderRoutes);
 
 //Payment endpoints
 router.use('/payments', paymentRoutes);
+
+//Refund endpoints
+router.use('/refunds', refundRoutes);
+
+//Report endpoints
+router.use('/reports', reportRoutes);
+
+//Dashboard endpoints
+router.use('/dashboard', dashboardRoutes);
 
 
 export default router;
