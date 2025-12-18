@@ -6,6 +6,8 @@ import itemRoutes from './Routes/item.routes.js';
 import roomRoutes from './Routes/room.routes.js';
 import tableRoutes from './Routes/table.routes.js';
 import orderRoutes from './Routes/order.routes.js';
+import paymentRoutes from './Routes/payment.routes.js';
+
 
 
 const router = express.Router();
@@ -30,6 +32,9 @@ router.use('/tables', tableRoutes);
 
 //Order endpoints
 router.use('/orders', orderRoutes);
+
+//Payment endpoints
+router.use('/payments', paymentRoutes);
 
 
 export default router;
