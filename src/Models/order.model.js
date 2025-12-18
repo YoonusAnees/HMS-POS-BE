@@ -16,6 +16,8 @@ const OrderModel = {
       include: {
         items: true,
         payments: true,
+         table: true,
+        room: true,
       },
     }),
 
@@ -23,7 +25,7 @@ const OrderModel = {
     prisma.order.findMany({
       where: { status: 'open' },
       include: {
-        items: true,
+         items: true, payments: true, table: true, room: true
       },
       orderBy: { openedAt: 'desc' },
     }),
@@ -32,6 +34,7 @@ const OrderModel = {
     prisma.order.update({
       where: { id },
       data,
+      include: { items: true, payments: true, table: true, room: true },
     }),
 };
 
