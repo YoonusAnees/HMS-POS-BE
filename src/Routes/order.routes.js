@@ -10,6 +10,7 @@ const router = express.Router();
 // router.post('/:id/close', auth(['admin','manager']), OrderController.close);
 
 router.get('/open', auth(['admin', 'manager', 'cashier', 'reception']), OrderController.listOpen);
+router.get('/all', auth(['admin', 'manager', 'cashier', 'reception']), OrderController.listAll);
 router.get('/:id', auth(['admin', 'manager', 'cashier', 'reception']), OrderController.getById);
 
 router.post('/', auth(['cashier', 'reception', 'manager', 'admin']), OrderController.create);

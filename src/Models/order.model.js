@@ -30,6 +30,11 @@ const OrderModel = {
       orderBy: { openedAt: 'desc' },
     }),
 
+    listAll: () =>
+    prisma.order.findMany({
+      include: {  items: true, payments: true, table: true, room: true }, 
+    }),
+
   update: (id, data) =>
     prisma.order.update({
       where: { id },

@@ -79,6 +79,14 @@ const OrderController = {
       next(err);
     }
   },
+
+  listAll: async (req, res, next) => {
+    try {
+      const orders = await OrderService.listAll();
+      res.json(orders);
+    } catch (err) {
+      next(err);
+    }   },
 };
 
 export default OrderController;

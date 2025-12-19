@@ -263,6 +263,8 @@ const OrderService = {
 
   getById: (id) => OrderModel.findById(id),
   listOpen: () => OrderModel.listOpen(),
+  listAll: () => OrderModel.listAll(),
+  
 };
 
 export default OrderService;

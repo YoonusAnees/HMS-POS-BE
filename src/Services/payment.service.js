@@ -105,6 +105,7 @@ const PaymentService = {
 
       return {
         payment,
+        order: updatedOrder,
         summary: {
           orderId,
           due: decStr(dueTotal),
