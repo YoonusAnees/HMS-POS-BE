@@ -29,7 +29,7 @@ const RefundService = {
       });
       if (!order) throw new Error('Order not found');
 
-      // ✅ create negative payment
+      // ✅ create negative payment (refund)
       const refund = await tx.payment.create({
         data: {
           orderId,
@@ -43,35 +43,48 @@ const RefundService = {
         },
       });
 
-      // ✅ compute totals correctly after insert
+      // ✅ recompute totals after insert
       const allPays = await tx.payment.findMany({ where: { orderId } });
-      const paidAfterRefund = allPays.reduce((s, p) => s + toNum(p.amount, 0), 0);
+      const paidNet = allPays.reduce((s, p) => s + toNum(p.amount, 0), 0);
 
       const due = toNum(order.grandTotal, 0);
-      const balance = round2(due - paidAfterRefund);
+      const balance = round2(due - paidNet);
 
-      // optional: reopen if refund makes not fully paid
-      let updatedOrder = order;
-      if (order.status === 'closed' && paidAfterRefund + 0.0001 < due) {
-        updatedOrder = await tx.order.update({
-          where: { id: orderId },
-          data: { status: 'open', closedAt: null, closedById: null },
-          include: { items: true, payments: true, table: true, room: true },
-        });
+      // ✅ decide order status
+      let nextStatus = order.status;
+      let nextClosedAt = order.closedAt;
+      let nextClosedById = order.closedById;
+
+      if (paidNet <= 0.0001) {
+        // FULL refund (net paid becomes 0 or below)
+        nextStatus = 'refunded';
+        // keep closedAt/closedById as-is (or set a refundedAt if you add one)
+      } else if (paidNet + 0.0001 < due) {
+        // not fully paid anymore -> reopen
+        nextStatus = 'open';
+        nextClosedAt = null;
+        nextClosedById = null;
       } else {
-        // return latest order with payments for receipt view
-        updatedOrder = await tx.order.findUnique({
-          where: { id: orderId },
-          include: { items: true, payments: true, table: true, room: true },
-        });
+        // still fully paid -> remain closed
+        nextStatus = 'closed';
       }
+
+      const updatedOrder = await tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: nextStatus,
+          closedAt: nextClosedAt,
+          closedById: nextClosedById,
+        },
+        include: { items: true, payments: true, table: true, room: true },
+      });
 
       return {
         refund,
         order: updatedOrder,
         summary: {
           orderId,
-          paid: decStr(paidAfterRefund),
+          paid: decStr(paidNet),
           due: decStr(due),
           balance: decStr(balance),
           orderStatus: updatedOrder.status,
