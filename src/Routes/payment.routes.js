@@ -7,17 +7,6 @@ const router = express.Router();
 
 router.post('/', auth(['admin', 'manager', 'cashier', 'reception']), PaymentController.create);
 
-router.get('/order/:orderId', auth(['admin', 'manager', 'cashier', 'reception']), async (req, res, next) => {
-  try {
-    const orderId = Number(req.params.orderId);
-    const data = await prisma.payment.findMany({
-      where: { orderId },
-      orderBy: { paidAt: 'asc' },
-    });
-    res.json(data);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get('/order/:orderId', auth(['admin', 'manager', 'cashier', 'reception']),PaymentController.getByOrderId);
 
 export default router;
