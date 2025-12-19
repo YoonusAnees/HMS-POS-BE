@@ -9,8 +9,8 @@ const decStr = (n) => round2(n).toFixed(2);
 
 const ReportService = {
   async endOfDay(dateStr, currency = 'LKR') {
-    const start = new Date(`${dateStr}T00:00:00.000`);
-    const end = new Date(`${dateStr}T23:59:59.999`);
+    const start = new Date(`${dateStr}T00:00:00.000Z`);
+    const end = new Date(`${dateStr}T23:59:59.999Z`);
 
     const payments = await prisma.payment.findMany({
       where: { currency, paidAt: { gte: start, lte: end } },
@@ -33,6 +33,20 @@ const ReportService = {
       net: decStr(v.gross - v.refunds),
     }));
 
+
+    const grossPayments = payments
+  .filter(p => toNum(p.amount, 0) > 0)
+  .reduce((s, p) => s + toNum(p.amount, 0), 0);
+
+   const refundPayments = payments
+  .filter(p => toNum(p.amount, 0) < 0)
+  .reduce((s, p) => s + Math.abs(toNum(p.amount, 0)), 0);
+
+   const netPayments = grossPayments - refundPayments;
+
+
+    
+
     const ordersClosed = await prisma.order.count({
       where: { status: 'closed', closedAt: { gte: start, lte: end } },
     });
@@ -46,12 +60,17 @@ const ReportService = {
     const taxTotal = orders.reduce((s, o) => s + toNum(o.taxTotal, 0), 0);
 
     return {
-      date: dateStr,
-      currency,
-      totalsByMethod,
-      ordersClosed,
-      revenueNet: decStr(revenueNet),
-      taxTotal: decStr(taxTotal),
+     date: dateStr,
+  currency,
+  totalsByMethod,
+  ordersClosed,
+  revenueNet: decStr(revenueNet),   // (order grand totals, closed)
+  taxTotal: decStr(taxTotal),
+
+  // ✅ better “Daily Sales” totals
+  grossPayments: decStr(grossPayments),
+  refundPayments: decStr(refundPayments),
+  netPayments: decStr(netPayments),
     };
   },
 };

@@ -4,7 +4,6 @@ import auth from '../Middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// Typically admin/manager only
-router.post('/', auth(['admin', 'manager']), RefundController.create);
+router.post('/', auth(['admin', 'manager','cashier']), RefundController.create);
 
 export default router;

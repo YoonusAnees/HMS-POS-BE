@@ -12,6 +12,7 @@ const VALID_PAY_METHODS = new Set(['cash', 'card', 'room', 'online']);
 const RefundService = {
   async createRefund(payload, createdById) {
     if (!createdById) throw new Error('createdById missing (auth)');
+
     const orderId = Number(payload.orderId);
     if (!orderId) throw new Error('orderId is required');
 
@@ -28,39 +29,52 @@ const RefundService = {
       });
       if (!order) throw new Error('Order not found');
 
+      // ✅ create negative payment
       const refund = await tx.payment.create({
         data: {
           orderId,
           method,
-          amount: decStr(-amount), // ✅ negative
+          amount: decStr(-amount),
           currency: payload.currency ? String(payload.currency) : 'LKR',
           tipAmount: null,
+          tendered: null,
+          change: null,
           createdById,
         },
       });
 
-      const paidAfterRefund = order.payments.reduce((s, p) => s + toNum(p.amount, 0), 0) - amount;
+      // ✅ compute totals correctly after insert
+      const allPays = await tx.payment.findMany({ where: { orderId } });
+      const paidAfterRefund = allPays.reduce((s, p) => s + toNum(p.amount, 0), 0);
+
       const due = toNum(order.grandTotal, 0);
       const balance = round2(due - paidAfterRefund);
 
-      // optional: if refund makes order not fully paid, reopen
-      let orderStatus = order.status;
+      // optional: reopen if refund makes not fully paid
+      let updatedOrder = order;
       if (order.status === 'closed' && paidAfterRefund + 0.0001 < due) {
-        const reopened = await tx.order.update({
+        updatedOrder = await tx.order.update({
           where: { id: orderId },
           data: { status: 'open', closedAt: null, closedById: null },
+          include: { items: true, payments: true, table: true, room: true },
         });
-        orderStatus = reopened.status;
+      } else {
+        // return latest order with payments for receipt view
+        updatedOrder = await tx.order.findUnique({
+          where: { id: orderId },
+          include: { items: true, payments: true, table: true, room: true },
+        });
       }
 
       return {
         refund,
+        order: updatedOrder,
         summary: {
           orderId,
           paid: decStr(paidAfterRefund),
           due: decStr(due),
           balance: decStr(balance),
-          orderStatus,
+          orderStatus: updatedOrder.status,
         },
       };
     });
