@@ -5,8 +5,9 @@ const DashboardController = {
     try {
       const from = String(req.query.from || '');
       const to = String(req.query.to || '');
-      if (!from || !to) throw new Error('from and to are required (YYYY-MM-DD)');
-      const data = await DashboardService.summary(from, to);
+      const currency = String(req.query.currency || 'LKR');
+
+      const data = await DashboardService.summary({ from, to, currency });
       res.json(data);
     } catch (e) {
       next(e);

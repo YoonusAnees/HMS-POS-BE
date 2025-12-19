@@ -36,6 +36,8 @@ model Item {
   price      Decimal
   taxRate    Decimal
   isActive   Boolean     @default(true)
+  stockQty      Int      @default(0)
+  reorderLevel  Int      @default(10)
   categoryId Int
   category   Category    @relation(fields: [categoryId], references: [id])
   orderItems OrderItem[]
@@ -63,7 +65,7 @@ model Order {
   id            Int              @id @default(autoincrement())
   orderNumber   String           @unique
   type          String
-  status        String
+  status String // open | closed | cancelled | refunded
   tableId       Int?
   roomId        Int?
   openedById    Int

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Item" ADD COLUMN     "reorderLevel" INTEGER NOT NULL DEFAULT 10,
+ADD COLUMN     "stockQty" INTEGER NOT NULL DEFAULT 0;

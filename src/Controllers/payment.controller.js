@@ -10,6 +10,19 @@ const PaymentController = {
       next(err);
     }
   },
+
+  getByOrderId:async (req, res, next) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    const data = await prisma.payment.findMany({
+      where: { orderId },
+      orderBy: { paidAt: 'asc' },
+    });
+    res.json(data);
+  } catch (e) {
+    next(e);
+  }
+}
 };
 
 export default PaymentController;
