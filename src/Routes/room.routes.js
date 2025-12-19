@@ -13,19 +13,19 @@ router.get(
 
 router.get(
   '/vacant',
-  auth(['admin', 'manager', 'reception']),
+  auth(['admin', 'manager', 'reception','cashier']),
   RoomController.listVacant
 );
 
 router.get(
   '/occupied',
-  auth(['admin', 'manager', 'reception']),
+  auth(['admin', 'manager', 'reception', 'cashier']),
   RoomController.listOccupied
 );
 
 router.get(
   '/out-of-order',
-  auth(['admin', 'manager']),
+  auth(['admin', 'manager', 'reception', 'cashier']),
   RoomController.listOutOfOrder
 );
 
